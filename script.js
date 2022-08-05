@@ -22,6 +22,7 @@ class Cups {
 
     this.smallCups.forEach((cup, localIndex) => {
       if (localIndex <= index) {
+        localStorage.setItem("fullCups", index + 1)
         return cup.classList.add("full")
       }
       return cup.classList.remove("full")
@@ -77,6 +78,15 @@ class Cups {
   }
 
   init() {
+    const fullCupsCookie = parseInt(localStorage.getItem("fullCups"))
+    if (fullCupsCookie) {
+      this.smallCups.forEach((cup, index) => {
+        if (index < fullCupsCookie) {
+          this.fillCups(index)
+          this.updateBigCup()
+        }
+      })
+    }
     this.liters.textContent = 2000
     this.smallCups.forEach((cup, index) => {
       cup.addEventListener("pointerup", () => {
@@ -89,7 +99,6 @@ class Cups {
 
 function main() {
   const cups = new Cups(bigCup, smallCups, liters, percentage, remained)
-  const { fillCups } = cups
   cups.init()
 }
 
